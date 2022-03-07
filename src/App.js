@@ -8,6 +8,8 @@ export default function App() {
       <SingleComment />
       <SingleComment />
       <SingleComment />
+      <SingleComment />
+      <SingleComment />
     </div>
   );
 }
