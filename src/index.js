@@ -1,10 +1,11 @@
 import React from "react";
 import ReactDOM from "react-dom";
+import LocationDisplay from "./location.js";
 
 class App extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { latitude: null, longitude: null };
+    this.state = { latitude: null, longitude: null, error: "" };
 
     window.navigator.geolocation.getCurrentPosition(
       (position) => {
@@ -13,17 +14,23 @@ class App extends React.Component {
           longitude: position.coords.longitude
         });
       },
-      (error) => console.log(error)
+      (error) => {
+        this.setState({ error: error.message });
+      }
     );
   }
   render() {
-    return (
-      <div>
-        {" "}
-        My latitute is: {this.state.latitude} <br />
-        My Longitude is: {this.state.longitude}
-      </div>
-    );
+    if (this.state.error && !this.state.latitude) {
+      return <div>error: {this.state.error}</div>;
+    } else if (!this.state.error && this.state.latitude) {
+      return (
+        <div>
+          <LocationDisplay latitude={this.state.latitude} />
+        </div>
+      );
+    } else {
+      return <div>Waiting for user permission</div>;
+    }
   }
 }
 
